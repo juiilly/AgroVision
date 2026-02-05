@@ -1,27 +1,16 @@
-const API_BASE = import.meta.env.VITE_BACKEND_URL;
-console.log("BACKEND URL:", import.meta.env.VITE_BACKEND_URL);
+import axios from "axios";
 
-export async function getWeather(city) {
-  const response = await fetch(
-    `${API_BASE}/weather?city=${encodeURIComponent(city)}`
-  );
+const API = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_URL,
+});
 
-  if (!response.ok) {
-    throw new Error("Backend error");
-  }
+export const getWeather = (city) =>
+  API.get(`/weather?city=${city}`).then(res => res.data);
 
-  return response.json();
-}
+export const getPrices = (state) =>
+  API.get(`/prices?state=${state}&commodity=Rice`)
+    .then(res => res.data);
 
-export async function getPrices(state) {
-  const res = await fetch(`${API_BASE}/prices?state=${state}`);
-  if (!res.ok) throw new Error("Failed to fetch prices");
-  return res.json();
-}
-
-export async function getPrediction(commodity, state) {
-  const res = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/predict?commodity=${commodity}&state=${state}`
-  );
-  return res.json();
-}
+export const predictPrice = (commodity, state) =>
+  API.get(`/predict?commodity=${commodity}&state=${state}`)
+    .then(res => res.data);

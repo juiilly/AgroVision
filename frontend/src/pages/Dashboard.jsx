@@ -2,6 +2,7 @@ import WeatherCard from "../components/WeatherCard";
 import PriceCard from "../components/PriceCard";
 import PredictCard from "../components/PredictCard";
 import SupplyMap from "../components/SupplyMap";
+import SupplyChain from "../components/SupplyChain";
 
 export default function Dashboard() {
   const logout = () => {

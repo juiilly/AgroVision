@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import SupplyForm from "./SupplyForm";
 import SupplyMap from "./SupplyMap";
 import SupplyTimeline from "./SupplyTimeline";
-import SupplyAnalytics from "./SupplyAnalytics";
+
 
 export default function SupplyChain() {
   const [events, setEvents] = useState([]);
@@ -50,14 +50,7 @@ export default function SupplyChain() {
         <SupplyTimeline events={events} />
       </div>
 
-      {/* ================= ANALYTICS ================= */}
-      <div className="bg-white p-6 rounded-xl shadow">
-        <h3 className="text-xl font-semibold mb-4">
-          📊 Supply Analytics
-        </h3>
-        <SupplyAnalytics events={events} />
-      </div>
-
+    
     </div>
   );
 }

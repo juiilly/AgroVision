@@ -60,7 +60,7 @@ export default function Dashboard() {
           </Card>
 
           <Card title="🚚 Live Supply Chain Tracking">
-            <SupplyMap />
+            <SupplyChain />
           </Card>
         </div>
 

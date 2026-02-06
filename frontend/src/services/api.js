@@ -10,18 +10,10 @@ export const getWeather = (city) =>
 
 /* Market Prices */
 export const getPrices = (state) =>
-  API.get(`/prices?state=${state}&commodity=Rice`).then(
-    (res) => res.data
-  );
+  API.get(`/prices?state=${state}&commodity=Rice`)
+    .then((res) => res.data);
 
-/* Price Prediction (GET-based) */
-export const predictPrice = (commodity, state) =>
-  API.get(`/predict?commodity=${commodity}&state=${state}`).then(
-    (res) => res.data
-  );
-
-/* ✅ Prediction for PredictCard (POST-based) */
-export const getPrediction = async (formData) => {
-  const res = await API.post("/predict", formData);
-  return res.data;
-};
+/* ✅ Price Prediction (SINGLE SOURCE OF TRUTH) */
+export const getPrediction = (commodity, state) =>
+  API.get(`/predict?commodity=${commodity}&state=${state}`)
+    .then((res) => res.data);

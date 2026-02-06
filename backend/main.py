@@ -108,3 +108,7 @@ async def supply_chain_ws(websocket: WebSocket):
 
     except:
         active_connections.remove(websocket)
+
+@app.get("/supply/history")
+def get_supply_history():
+    return supply_events

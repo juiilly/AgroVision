@@ -19,21 +19,66 @@ ChartJS.register(
 );
 
 export default function PriceChart({ prices }) {
-  if (!prices || prices.length === 0) {
-    return <p className="text-sm text-gray-500">No data to show</p>;
+  // Safety check
+  if (!Array.isArray(prices) || prices.length === 0) {
+    return (
+      <p className="text-sm text-gray-500 text-center mt-2">
+        No price data available
+      </p>
+    );
   }
 
+  const labels = prices.map(
+    (p, i) => p.market || `Market ${i + 1}`
+  );
+
+  const values = prices.map(
+    (p) => Number(p.modal_price) || 0
+  );
+
   const data = {
-    labels: prices.map((p) => p.market),
+    labels,
     datasets: [
       {
         label: "Modal Price (₹)",
-        data: prices.map((p) => Number(p.modal_price)),
+        data: values,
+        borderColor: "#16a34a", // green-600
+        backgroundColor: "rgba(22, 163, 74, 0.15)",
+        pointRadius: 4,
+        pointHoverRadius: 6,
         borderWidth: 2,
-        tension: 0.4,
+        tension: 0.35,
+        fill: true,
       },
     ],
   };
 
-  return <Line data={data} />;
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top",
+      },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => `₹ ${ctx.raw}`,
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: false,
+        ticks: {
+          callback: (value) => `₹${value}`,
+        },
+      },
+    },
+  };
+
+  return (
+    <div className="bg-white p-3 rounded-lg shadow mt-3">
+      <Line data={data} options={options} />
+    </div>
+  );
 }

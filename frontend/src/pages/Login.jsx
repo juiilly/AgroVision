@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import AuthLayout from "./AuthLayout";
 
 const API_BASE = import.meta.env.VITE_BACKEND_URL;
 
@@ -8,17 +9,17 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const res = await fetch(`${API_BASE}/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
@@ -27,68 +28,59 @@ export default function Login() {
       }
 
       const data = await res.json();
-
-      // ✅ SAVE TOKEN
       localStorage.setItem("token", data.access_token);
-
-      // ✅ REDIRECT
       navigate("/dashboard");
 
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleLogin}
-        className="bg-white p-8 rounded-xl shadow-md w-96"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-
+    <AuthLayout
+      title="Welcome Back"
+      footer={
+        <>
+          New user?{" "}
+          <Link to="/register" className="text-green-600 font-medium">
+            Register
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={handleLogin} className="space-y-4">
         {error && (
-          <p className="text-red-500 mb-4 text-sm">{error}</p>
+          <p className="text-red-500 text-sm text-center">{error}</p>
         )}
 
-        {/* EMAIL */}
         <input
           type="email"
-          name="email"
-          autoComplete="email"
           required
-          placeholder="Email"
-          className="border p-2 w-full mb-4 rounded"
+          placeholder="Email address"
+          className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-green-400 outline-none"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        {/* PASSWORD */}
         <input
           type="password"
-          name="password"
-          autoComplete="current-password"
           required
           placeholder="Password"
-          className="border p-2 w-full mb-4 rounded"
+          className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-green-400 outline-none"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
           type="submit"
-          className="bg-green-600 hover:bg-green-700 text-white w-full py-2 rounded"
+          disabled={loading}
+          className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg transition"
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
-
-        <p className="text-sm text-center mt-4">
-          New user?{" "}
-          <Link to="/register" className="text-green-600 font-medium">
-            Register
-          </Link>
-        </p>
       </form>
-    </div>
+    </AuthLayout>
   );
 }

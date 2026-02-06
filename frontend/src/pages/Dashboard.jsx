@@ -10,69 +10,86 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 md:p-10">
-      
-      {/* ================= HEADER ================= */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <h2 className="text-3xl font-bold text-green-700">
-          🌱 Farmer Dashboard
-        </h2>
+    <div className="min-h-screen bg-gray-50 px-4 md:px-10 py-6">
+
+      {/* ================= HERO HEADER ================= */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-green-700">
+            🌱 Smart Farmer Dashboard
+          </h1>
+          <p className="text-gray-500 mt-1">
+            AI-powered insights for smarter agriculture decisions
+          </p>
+        </div>
 
         <button
           onClick={logout}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition"
+          className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg transition shadow"
         >
           Logout
         </button>
       </div>
 
-      {/* ================= OVERVIEW ================= */}
-      <h3 className="text-xl font-semibold mb-4 text-gray-700">
-        📊 Farm Overview
-      </h3>
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-        {/* Weather */}
-        <div className="bg-white p-6 rounded-xl shadow">
-          <WeatherCard />
-        </div>
-
-        {/* Crop Health */}
-        <div className="bg-white p-6 rounded-xl shadow flex flex-col justify-between">
-          <div className="text-lg font-medium">🌾 Crop Health</div>
-          <p className="text-3xl font-bold mt-4 text-green-600">Good</p>
-        </div>
-
-        {/* Prices */}
-        <div className="bg-white p-6 rounded-xl shadow">
-          <PriceCard />
-        </div>
-
-        {/* Alerts */}
-        <div className="bg-white p-6 rounded-xl shadow flex flex-col justify-between">
-          <div className="text-lg font-medium">🚨 Alerts</div>
-          <p className="text-3xl font-bold mt-4 text-yellow-600">1 New</p>
-        </div>
+      {/* ================= QUICK STATS ================= */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+        <StatCard title="Weather" value="Live" icon="🌦" />
+        <StatCard title="Crop Health" value="Good" icon="🌾" />
+        <StatCard title="Market Prices" value="Updated" icon="📈" />
+        <StatCard title="Alerts" value="1 New" icon="🚨" />
       </div>
 
-      {/* ================= PREDICTION ================= */}
-      <h3 className="text-xl font-semibold mb-4 text-gray-700">
-        🔮 AI Price Prediction
-      </h3>
+      {/* ================= MAIN GRID ================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-      <div className="bg-white p-6 rounded-xl shadow mb-10">
-        <PredictCard />
+        {/* LEFT COLUMN */}
+        <div className="space-y-8">
+          <Card title="🌦 Weather Forecast">
+            <WeatherCard />
+          </Card>
+
+          <Card title="🔮 AI Price Prediction">
+            <PredictCard />
+          </Card>
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div className="lg:col-span-2 space-y-8">
+          <Card title="📈 Crop Market Prices">
+            <PriceCard />
+          </Card>
+
+          <Card title="🚚 Live Supply Chain Tracking">
+            <SupplyMap />
+          </Card>
+        </div>
+
       </div>
+    </div>
+  );
+}
 
-      {/* ================= SUPPLY CHAIN ================= */}
-      <h3 className="text-xl font-semibold mb-4 text-gray-700">
-        🚚 Live Supply Chain Tracking
+/* ================= REUSABLE UI ================= */
+
+function Card({ title, children }) {
+  return (
+    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-5">
+      <h3 className="text-lg font-semibold text-gray-700 mb-4">
+        {title}
       </h3>
+      {children}
+    </div>
+  );
+}
 
-      <div className="bg-white p-6 rounded-xl shadow">
-        <SupplyMap />
+function StatCard({ title, value, icon }) {
+  return (
+    <div className="bg-white rounded-xl shadow-sm p-5 flex items-center gap-4">
+      <div className="text-3xl">{icon}</div>
+      <div>
+        <p className="text-sm text-gray-500">{title}</p>
+        <p className="text-xl font-bold text-green-600">{value}</p>
       </div>
-
     </div>
   );
 }

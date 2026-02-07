@@ -3,7 +3,6 @@ import SupplyForm from "./SupplyForm";
 import SupplyMap from "./SupplyMap";
 import SupplyTimeline from "./SupplyTimeline";
 
-
 export default function SupplyChain() {
   const [events, setEvents] = useState([]);
   const [ws, setWs] = useState(null);
@@ -14,8 +13,16 @@ export default function SupplyChain() {
     );
 
     socket.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      setEvents((prev) => [...prev, data]);
+      try {
+        const data = JSON.parse(e.data);
+
+        // extra safety
+        if (data) {
+          setEvents((prev) => [...prev, data]);
+        }
+      } catch (err) {
+        console.error("Bad WS data:", err);
+      }
     };
 
     socket.onopen = () => {
@@ -33,24 +40,23 @@ export default function SupplyChain() {
 
   return (
     <div className="space-y-10">
-
-      {/* ================= ADD SUPPLY EVENT ================= */}
+      {/* ADD EVENT */}
       <SupplyForm ws={ws} />
 
-      {/* ================= MAP ================= */}
+      {/* MAP */}
       <div className="bg-white p-4 rounded-xl shadow">
         <h3 className="text-lg font-semibold mb-3">
           🗺️ Live Supply Locations
         </h3>
-        <SupplyMap events={events} />
+
+        {/* ALWAYS send array */}
+        <SupplyMap events={Array.isArray(events) ? events : []} />
       </div>
 
-      {/* ================= TIMELINE ================= */}
+      {/* TIMELINE */}
       <div className="bg-white p-4 rounded-xl shadow">
-        <SupplyTimeline events={events} />
+        <SupplyTimeline events={Array.isArray(events) ? events : []} />
       </div>
-
-    
     </div>
   );
 }
